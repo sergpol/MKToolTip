@@ -32,19 +32,19 @@ import UIKit
 
 public extension UIView {
 
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), statusBarStile: UIStatusBarStyle, delegate: MKToolTipDelegate? = nil) {
         let tooltip = MKToolTip(view: self, identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
         tooltip.calculateFrame()
-        tooltip.show()
+        tooltip.show(with: statusBarStile)
     }
     
 }
 
 public extension UIBarItem {
     
-    @objc public func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), delegate: MKToolTipDelegate? = nil) {
+    @objc func showToolTip(identifier: String, title: String? = nil, message: String, button: String? = nil, arrowPosition: MKToolTip.ArrowPosition, preferences: ToolTipPreferences = ToolTipPreferences(), statusBarStile: UIStatusBarStyle, delegate: MKToolTipDelegate? = nil) {
         if let view = self.view {
-            view.showToolTip(identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, delegate: delegate)
+            view.showToolTip(identifier: identifier, title: title, message: message, button: button, arrowPosition: arrowPosition, preferences: preferences, statusBarStile: statusBarStile, delegate: delegate)
         }
     }
     
@@ -340,8 +340,8 @@ open class MKToolTip: UIView {
         return frame
     }
     
-    fileprivate func show() {
-        let viewController = UIViewController()
+    fileprivate func show(with statusBarStile: UIStatusBarStyle) {
+        let viewController = statusBarStile == .lightContent ? MKViewController() : UIViewController()
         viewController.view.alpha = 0
         viewController.view.addSubview(self)
         
